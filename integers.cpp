@@ -1,9 +1,8 @@
 //@	{"targets":[{"name":"integers.test","type":"application"}]}
 
 #include "integers.hpp"
-using namespace Type;
 
 int main()
 	{
-	Type::Int<32> foobar;
+	Type::IntBase<int8_t> foo(static_cast<int8_t>(112));
 	}
