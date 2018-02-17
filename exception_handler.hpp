@@ -3,23 +3,20 @@
 #ifndef TYPE_EXCEPTION_HANDLER_HPP
 #define TYPE_EXCEPTION_HANDLER_HPP
 
-#include <array>
+#include "error_message.hpp"
 
 namespace Type
 	{
-	typedef std::array<char, 512> ErrorMessage;
-
-	typedef void (*ExceptionFunction)(const ErrorMessage& message);
-
 	class ExceptionHandler
 		{
 		public:
 			template<class U>
 			static void castException(U value)
-				{raise(ErrorMessage("#0 cannot be represented internally", value));}
+				{raise(ErrorMessage("cannot be represented internally"));}
 
 		private:
-			static void raise(const ErrorMessage& message);
+			static void raise(const ErrorMessage& message)
+				{fprintf(stderr,"%s\n", message.c_str());abort();}
 		};
 	}
 
