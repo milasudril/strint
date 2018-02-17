@@ -7,33 +7,40 @@
 
 namespace Type
 	{
+	template<class T>
+	inline char* format(char* begin,char*,T) noexcept
+		{return begin;}
+
+	template<>
+	inline char* format<const char*>(char* begin, char* end, const char* str) noexcept
+		{
+		while(begin!=end - 1)
+			{
+			auto ch_in=*str;
+			if(ch_in==0)
+				{return begin;}
+			*begin=ch_in;
+			++begin;
+			++str;
+			}
+		return begin;
+		}
+
+
 	class ErrorMessage
 		{
 		public:
 			template<class First, class ... T>
-			explicit ErrorMessage(First&& first,T ... values) noexcept
+			explicit ErrorMessage(First&& first,T&& ... values) noexcept
 				{
-				formatMessage(m_message.begin(), m_message.end(), std::forward<First>(first), values...);
+				formatMessage(m_message.begin(), m_message.end(), std::forward<First>(first)
+					, std::forward<T>(values)...);
 				}
 
 			const char* c_str() const noexcept
 				{return m_message.begin();}
 
 		private:
-			static char* format(char* begin, char* end, const char* str) noexcept
-				{
-				while(begin!=end - 1)
-					{
-					auto ch_in=*str;
-					if(ch_in==0)
-						{return begin;}
-					*begin=ch_in;
-					++begin;
-					++str;
-					}
-				return begin;
-				}
-
 			static char* formatMessage(char* begin,char*) noexcept
 				{
 				*begin='\0';

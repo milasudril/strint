@@ -12,7 +12,7 @@ namespace Type
 		public:
 			template<class U>
 			static void castException(U value)
-				{raise(ErrorMessage("cannot be represented internally"));}
+				{raise(ErrorMessage(value, " cannot be represented internally."));}
 
 		private:
 			static void raise(const ErrorMessage& message)
