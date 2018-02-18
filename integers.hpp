@@ -5,84 +5,266 @@
 
 #include "narrow_cast.hpp"
 #include <cstdint>
-#include <cstddef>
+#include <climits>
 #include <type_traits>
 
 namespace Type
 	{
 	template<class T>
-	struct is_unsigned
+	struct IsUnsigned
 		{static constexpr bool value = std::is_unsigned<T>::value;};
 
 	template<class T>
-	struct is_signed
-		{static constexpr bool value = !is_unsigned<T>::value;};
+	struct IsSigned
+		{static constexpr bool value = !IsUnsigned<T>::value;};
 
 	template<class IntegerTypeA, class IntegerTypeB>
-	struct SameSign
+	struct SameSignness
 		{
-		static constexpr bool value=(is_signed<IntegerTypeA>::value && is_signed<IntegerTypeB>::value)
-			|| (is_unsigned<IntegerTypeA>::value && is_unsigned<IntegerTypeB>::value) ;
+		static constexpr bool value=(IsSigned<IntegerTypeA>::value && IsSigned<IntegerTypeB>::value)
+			|| (IsUnsigned<IntegerTypeA>::value && IsUnsigned<IntegerTypeB>::value) ;
 		};
+
+	template<class From, class To>
+	struct LosslessConvertible
+		{
+		static constexpr bool value=SameSignness<From,To>::value && sizeof(To)>=sizeof(From);
+		};
+
 
 	template<class IntegerType>
 	class IntBase
 		{
 		public:
 			template<class U
-				,typename std::enable_if<sizeof(U)<=sizeof(IntegerType) && SameSign<IntegerType,U>::value,int>::type x=1>
+				,typename std::enable_if<LosslessConvertible<U,IntegerType>::value,int>::type x=1>
 			constexpr IntBase(U value) noexcept:m_value(value)
 				{}
 
 			template<class U
-				,typename std::enable_if<!(sizeof(U)<=sizeof(IntegerType) && SameSign<IntegerType,U>::value),int>::type x=1>
+				,typename std::enable_if<!LosslessConvertible<U,IntegerType>::value,int>::type x=1>
 			explicit IntBase(U value):m_value(narrow_cast<IntegerType>(value))
 				{}
 
 			constexpr operator IntegerType() const noexcept
 				{return m_value;}
 
-			static constexpr bool is_unsigned=is_unsigned<IntegerType>::value;
+			static constexpr bool isUnsigned() noexcept
+				{return IsUnsigned<IntegerType>::value;}
 
-		private:
+		protected:
 			IntegerType m_value;
 		};
 
 	template<class IntegerType>
-	struct is_unsigned<IntBase<IntegerType>>
-		{static constexpr bool value = IntBase<IntegerType>::is_unsigned;};
+	struct IsUnsigned<IntBase<IntegerType>>
+		{static constexpr bool value = IntBase<IntegerType>::isUnsigned();};
 
-	template<size_t N>
-	class Int;
-
-	template<>
-	class Int<8>:public IntBase<int8_t>
+	enum class IntSize:int
 		{
-		public:
-			using IntBase<int8_t>::IntBase;
+		 Smallest = CHAR_BIT
+		,Natural = CHAR_BIT * sizeof(int)
+		,HalfPointer = CHAR_BIT * sizeof(void*)/2
+		,Pointer = CHAR_BIT * sizeof(void*)
+		,Largest = CHAR_BIT * sizeof(intmax_t)
 		};
 
-	template<>
-	class Int<16>:public IntBase<int16_t>
-		{
-		public:
-			using IntBase<int16_t>::IntBase;
-		};
+	enum class Signedness:int{Signed,Unsigned};
+
+	template<int N,Signedness s>
+	struct BitsToIntType;
 
 	template<>
-	class Int<32>:public IntBase<int32_t>
-		{
-		public:
-			using IntBase<int32_t>::IntBase;
-		};
+	struct BitsToIntType<8,Signedness::Signed>
+		{typedef int8_t type;};
 
 	template<>
-	class Int<64>:public IntBase<int64_t>
+	struct BitsToIntType<16,Signedness::Signed>
+		{typedef int16_t type;};
+
+	template<>
+	struct BitsToIntType<32,Signedness::Signed>
+		{typedef int32_t type;};
+
+	template<>
+	struct BitsToIntType<64,Signedness::Signed>
+		{typedef int64_t type;};
+
+	template<>
+	struct BitsToIntType<8,Signedness::Unsigned>
+		{typedef uint8_t type;};
+
+	template<>
+	struct BitsToIntType<16,Signedness::Unsigned>
+		{typedef uint16_t type;};
+
+	template<>
+	struct BitsToIntType<32,Signedness::Unsigned>
+		{typedef uint32_t type;};
+
+	template<>
+	struct BitsToIntType<64,Signedness::Unsigned>
+		{typedef uint64_t type;};
+
+	template<int N=IntSize::Natural,Signedness s=Signedness::Signed>
+	class Int:public IntBase<typename BitsToIntType<N,s>::type>
 		{
 		public:
-			using IntBase<int64_t>::IntBase;
+			using IntBase<typename BitsToIntType<N,s>::type>::IntBase;
+			using IntBase<typename BitsToIntType<N,s>::type>::isUnsigned;
+			using IntBase<typename BitsToIntType<N,s>::type>::m_value;
+
+			constexpr Int& operator+=(Int a) noexcept
+				{
+				m_value+=a.m_value;
+				return *this;
+				}
+
+			constexpr Int& operator-=(Int a) noexcept
+				{
+				m_value-=a.m_value;
+				return *this;
+				}
+
+			constexpr Int& operator*=(Int a) noexcept
+				{
+				m_value*=a.m_value;
+				return *this;
+				}
+
+			constexpr Int& operator/=(Int a) noexcept
+				{
+				m_value/=a.m_value;
+				return *this;
+				}
+
+			constexpr Int& operator%=(Int a) noexcept
+				{
+				m_value%=a.m_value;
+				return *this;
+				}
+
+			constexpr Int& operator<<=(Int b) noexcept
+				{
+				m_value<<=b.m_value;
+				return *this;
+				}
+
+			constexpr Int& operator>>=(Int b) noexcept
+				{
+				m_value>>=b.m_value;
+				return *this;
+				}
+
+			constexpr Int& operator|=(Int b) const noexcept
+				{
+				m_value|=b.m_value;
+				return *this;
+				}
+
+			constexpr Int& operator&=(Int b) const noexcept
+				{
+				m_value&=b.m_value;
+				return *this;
+				}
+
+			constexpr Int& operator^=(Int b) const noexcept
+				{
+				m_value^=b.m_value;
+				return *this;
+				}
+
+
+
+			constexpr Int operator-() const noexcept
+				{return Int(-m_value);}
+
+			constexpr Int operator~() const noexcept
+				{return Int(~m_value);}
+
+
+
+			constexpr bool operator<(Int b) const noexcept
+				{return m_value < b.m_value;}
+
+			constexpr bool operator>(Int b) const noexcept
+				{return b < *this;}
+
+			constexpr bool operator==(Int b) const noexcept
+				{return m_value == b.m_value;}
+
+			constexpr bool operator!=(Int b) const noexcept
+				{return !(*this == b);}
+
+			constexpr bool operator<=(Int b) const noexcept
+				{return !(*this > b);}
+
+			constexpr bool operator>=(Int b) const noexcept
+				{return !(*this < b);}
 		};
 
+
+	template<int N,Signedness s>
+	inline constexpr Int<N,s> operator+(Int<N,s> a, Int<N,s> b) noexcept
+		{return a+=b;}
+
+	template<int N,Signedness s>
+	inline constexpr Int<N,s> operator-(Int<N,s> a, Int<N,s> b) noexcept
+		{return a-=b;}
+
+	template<int N,Signedness s>
+	inline constexpr Int<N,s> operator*(Int<N,s> a, Int<N,s> b) noexcept
+		{return a*=b;}
+
+	template<int N,Signedness s>
+	inline constexpr Int<N,s> operator/(Int<N,s> a, Int<N,s> b) noexcept
+		{return a/=b;}
+
+	template<int N,Signedness s>
+	inline constexpr Int<N,s> operator%(Int<N,s> a, Int<N,s> b) noexcept
+		{return a%=b;}
+
+	template<int N,Signedness s>
+	inline constexpr Int<N,s> operator<<(Int<N,s> a, Int<N,s> b) noexcept
+		{return a<<=b;}
+
+	template<int N,Signedness s>
+	inline constexpr Int<N,s> operator>>(Int<N,s> a, Int<N,s> b) noexcept
+		{return a>>=b;}
+
+	template<int N,Signedness s>
+	inline constexpr Int<N,s> operator|(Int<N,s> a, Int<N,s> b) noexcept
+		{return a|=b;}
+
+	template<int N,Signedness s>
+	inline constexpr Int<N,s> operator&(Int<N,s> a, Int<N,s> b) noexcept
+		{return a&=b;}
+
+	template<int N,Signedness s>
+	inline constexpr Int<N,s> operator^=(Int<N,s> a, Int<N,s> b) noexcept
+		{return a^=b;}
 	}
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
