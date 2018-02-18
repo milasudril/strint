@@ -12,16 +12,11 @@ namespace Type
 	{
 	template<class T>
 	struct is_unsigned
-		{
-		static constexpr bool value = std::is_unsigned<T>::value;
-		};
+		{static constexpr bool value = std::is_unsigned<T>::value;};
 
 	template<class T>
 	struct is_signed
-		{
-		static constexpr bool value = !is_unsigned<T>::value;
-		};
-
+		{static constexpr bool value = !is_unsigned<T>::value;};
 
 	template<class IntegerTypeA, class IntegerTypeB>
 	struct SameSign
@@ -55,15 +50,10 @@ namespace Type
 
 	template<class IntegerType>
 	struct is_unsigned<IntBase<IntegerType>>
-		{
-		static constexpr bool value = IntBase<IntegerType>::is_unsigned;
-		};
-
-//	template<> using is_signed<IntBase> = std::is_signed<T>;
+		{static constexpr bool value = IntBase<IntegerType>::is_unsigned;};
 
 	template<size_t N>
 	class Int;
-
 
 	template<>
 	class Int<8>:public IntBase<int8_t>
