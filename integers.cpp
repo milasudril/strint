@@ -10,4 +10,8 @@ int main()
 
 	int8_t val=123;
 	foo=val;
+
+	Type::Int<8,Type::Signedness::Unsigned> flags(uint8_t(0));
+	flags|=uint8_t(0xff);
+
 	}

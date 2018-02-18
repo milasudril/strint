@@ -37,12 +37,12 @@ namespace Type
 		{
 		public:
 			template<class U
-				,typename std::enable_if<LosslessConvertible<U,IntegerType>::value,int>::type x=1>
+				,std::enable_if_t<LosslessConvertible<U,IntegerType>::value,int> x=1>
 			constexpr IntBase(U value) noexcept:m_value(value)
 				{}
 
 			template<class U
-				,typename std::enable_if<!LosslessConvertible<U,IntegerType>::value,int>::type x=1>
+				,std::enable_if_t<!LosslessConvertible<U,IntegerType>::value,int> x=1>
 			explicit IntBase(U value):m_value(narrow_cast<IntegerType>(value))
 				{}
 
@@ -109,6 +109,10 @@ namespace Type
 	template<int N=IntSize::Natural,Signedness s=Signedness::Signed>
 	class Int:public IntBase<typename BitsToIntType<N,s>::type>
 		{
+		private:
+			template<class Other>
+			using EnableForUnsigned = std::enable_if_t<Int::isUnsigned() && std::is_same<Int,Other>::value,Other>;
+
 		public:
 			using IntBase<typename BitsToIntType<N,s>::type>::IntBase;
 			using IntBase<typename BitsToIntType<N,s>::type>::isUnsigned;
@@ -138,39 +142,43 @@ namespace Type
 				return *this;
 				}
 
-			constexpr Int& operator%=(Int a) noexcept
+			template<class Other=Int>
+			constexpr Int& operator%=(EnableForUnsigned<Other> a) noexcept
 				{
 				m_value%=a.m_value;
 				return *this;
 				}
 
-			constexpr Int& operator<<=(Int b) noexcept
+			constexpr Int& operator<<=(Int a) noexcept
 				{
-				m_value<<=b.m_value;
+				m_value<<=a.m_value;
 				return *this;
 				}
 
-			constexpr Int& operator>>=(Int b) noexcept
+			constexpr Int& operator>>=(Int a) noexcept
 				{
-				m_value>>=b.m_value;
+				m_value>>=a.m_value;
 				return *this;
 				}
 
-			constexpr Int& operator|=(Int b) const noexcept
+			template<class Other=Int>
+			constexpr Int& operator|=(EnableForUnsigned<Other> a) noexcept
 				{
-				m_value|=b.m_value;
+				m_value|=a.m_value;
 				return *this;
 				}
 
-			constexpr Int& operator&=(Int b) const noexcept
+			template<class Other=Int>
+			constexpr Int& operator&=(EnableForUnsigned<Other> a) const noexcept
 				{
-				m_value&=b.m_value;
+				m_value&=a.m_value;
 				return *this;
 				}
 
-			constexpr Int& operator^=(Int b) const noexcept
+			template<class Other=Int>
+			constexpr Int& operator^=(EnableForUnsigned<Other> a) const noexcept
 				{
-				m_value^=b.m_value;
+				m_value^=a.m_value;
 				return *this;
 				}
 
