@@ -4,6 +4,10 @@
 
 int main()
 	{
-	Type::IntBase<int8_t> foo(static_cast<int8_t>(112));
-	Type::IntBase<int8_t> foo_bar(1234);
+	Type::Int<8> foo(static_cast<int8_t>(112));
+
+	Type::Int<16> bar(foo);
+
+	int8_t val=123;
+	foo=val;
 	}
