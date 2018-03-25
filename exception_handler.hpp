@@ -11,12 +11,12 @@ namespace Type
 		{
 		public:
 			template<class U>
-			static void castException(U value)
+			[[noreturn]] static void castException(U value)
 				{raise(ErrorMessage(value, " cannot be represented internally."));}
 
 		private:
-			static void raise(const ErrorMessage& message)
-				{fprintf(stderr,"%s\n", message.c_str());abort();}
+			[[noreturn]] static void raise(const ErrorMessage& message)
+				{throw message;}
 		};
 	}
 

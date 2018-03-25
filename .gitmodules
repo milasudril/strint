@@ -1,0 +1,3 @@
+[submodule "stic"]
+	path = stic
+	url = https://github.com/milasudril/stic

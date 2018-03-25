@@ -46,11 +46,14 @@ namespace Type
 			explicit IntBase(U value):m_value(narrow_cast<IntegerType>(value))
 				{}
 
-			constexpr operator IntegerType() const noexcept
+			explicit constexpr operator IntegerType() const noexcept
 				{return m_value;}
 
 			static constexpr bool isUnsigned() noexcept
 				{return IsUnsigned<IntegerType>::value;}
+
+			static constexpr bool isSigned() noexcept
+				{return !isUnsigned();}
 
 		protected:
 			IntegerType m_value;
@@ -113,9 +116,13 @@ namespace Type
 			template<class Other>
 			using EnableForUnsigned = std::enable_if_t<Int::isUnsigned() && std::is_same<Int,Other>::value,Other>;
 
+			template<class Other>
+			using EnableForSigned = std::enable_if_t<!Int::isSigned() && std::is_same<Int,Other>::value,Other>;
+
 		public:
 			using IntBase<typename BitsToIntType<N,s>::type>::IntBase;
 			using IntBase<typename BitsToIntType<N,s>::type>::isUnsigned;
+			using IntBase<typename BitsToIntType<N,s>::type>::isSigned;
 			using IntBase<typename BitsToIntType<N,s>::type>::m_value;
 
 			constexpr Int& operator+=(Int a) noexcept
@@ -183,12 +190,13 @@ namespace Type
 				}
 
 
+			template<class Other=Int>
+			constexpr EnableForSigned<Other> operator-() const noexcept
+				{return EnableForSigned<Other>(-m_value);}
 
-			constexpr Int operator-() const noexcept
-				{return Int(-m_value);}
-
-			constexpr Int operator~() const noexcept
-				{return Int(~m_value);}
+			template<class Other=Int>
+			constexpr EnableForUnsigned<Other> operator~() const noexcept
+				{return EnableForUnsigned<Other>(~m_value);}
 
 
 
