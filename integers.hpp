@@ -6,44 +6,19 @@
 #include "narrow_cast.hpp"
 #include <cstdint>
 #include <climits>
-#include <type_traits>
 
 namespace Type
 	{
-	template<class T>
-	struct IsUnsigned
-		{static constexpr bool value = std::is_unsigned<T>::value;};
-
-	template<class T>
-	struct IsSigned
-		{static constexpr bool value = !IsUnsigned<T>::value;};
-
-	template<class IntegerTypeA, class IntegerTypeB>
-	struct SameSignness
-		{
-		static constexpr bool value=(IsSigned<IntegerTypeA>::value && IsSigned<IntegerTypeB>::value)
-			|| (IsUnsigned<IntegerTypeA>::value && IsUnsigned<IntegerTypeB>::value) ;
-		};
-
-	template<class From, class To>
-	struct LosslessConvertible
-		{
-		static constexpr bool value=SameSignness<From,To>::value && sizeof(To)>=sizeof(From);
-		};
-
-
 	template<class IntegerType>
 	class IntBase
 		{
 		public:
-			template<class U
-				,std::enable_if_t<LosslessConvertible<U,IntegerType>::value,int> x=1>
+			template<class U,std::enable_if_t<IsLosslessConvertible<U,IntegerType>::value,int> x=1>
 			constexpr IntBase(U value) noexcept:m_value(value)
 				{}
 
-			template<class U
-				,std::enable_if_t<!LosslessConvertible<U,IntegerType>::value,int> x=1>
-			explicit IntBase(U value):m_value(narrow_cast<IntegerType>(value))
+			template<class U,std::enable_if_t<!IsLosslessConvertible<U,IntegerType>::value,int> x=1>
+			constexpr explicit IntBase(U value):m_value(narrow_cast<IntegerType>(value))
 				{}
 
 			explicit constexpr operator IntegerType() const noexcept
@@ -66,6 +41,7 @@ namespace Type
 	enum class IntSize:int
 		{
 		 Smallest = CHAR_BIT
+		,HalfNatural = CHAR_BIT * sizeof(int)/2
 		,Natural = CHAR_BIT * sizeof(int)
 		,HalfPointer = CHAR_BIT * sizeof(void*)/2
 		,Pointer = CHAR_BIT * sizeof(void*)
@@ -112,12 +88,21 @@ namespace Type
 	template<int N=IntSize::Natural,Signedness s=Signedness::Signed>
 	class Int:public IntBase<typename BitsToIntType<N,s>::type>
 		{
+		//TODO: Rename this class to Integer
+		//TODO: Add max
+		//TODO: Add min
+		//TODO: Add zero
+		//TODO: Add unity
+		//TODO: Add addInv (only for signed)
+
 		private:
-			template<class Other>
-			using EnableForUnsigned = std::enable_if_t<Int::isUnsigned() && std::is_same<Int,Other>::value,Other>;
+			typedef Int<N, s> Self;
 
 			template<class Other>
-			using EnableForSigned = std::enable_if_t<!Int::isSigned() && std::is_same<Int,Other>::value,Other>;
+			using EnableForUnsigned = std::enable_if<Int::isUnsigned() && std::is_same<Int,Other>::value,Other>;
+
+			template<class Other>
+			using EnableForSigned = std::enable_if<Int::isSigned() && std::is_same<Int,Other>::value,Other>;
 
 		public:
 			using IntBase<typename BitsToIntType<N,s>::type>::IntBase;
@@ -150,7 +135,7 @@ namespace Type
 				}
 
 			template<class Other=Int>
-			constexpr Int& operator%=(EnableForUnsigned<Other> a) noexcept
+			constexpr Int& operator%=(typename EnableForUnsigned<Other>::type a) noexcept
 				{
 				m_value%=a.m_value;
 				return *this;
@@ -169,21 +154,21 @@ namespace Type
 				}
 
 			template<class Other=Int>
-			constexpr Int& operator|=(EnableForUnsigned<Other> a) noexcept
+			constexpr Int& operator|=(typename EnableForUnsigned<Other>::type a) noexcept
 				{
 				m_value|=a.m_value;
 				return *this;
 				}
 
 			template<class Other=Int>
-			constexpr Int& operator&=(EnableForUnsigned<Other> a) const noexcept
+			constexpr Int& operator&=(typename EnableForUnsigned<Other>::type a) const noexcept
 				{
 				m_value&=a.m_value;
 				return *this;
 				}
 
 			template<class Other=Int>
-			constexpr Int& operator^=(EnableForUnsigned<Other> a) const noexcept
+			constexpr Int& operator^=(typename EnableForUnsigned<Other>::type a) const noexcept
 				{
 				m_value^=a.m_value;
 				return *this;
@@ -191,11 +176,11 @@ namespace Type
 
 
 			template<class Other=Int>
-			constexpr EnableForSigned<Other> operator-() const noexcept
+			constexpr typename EnableForSigned<Other>::type operator-() const noexcept
 				{return EnableForSigned<Other>(-m_value);}
 
 			template<class Other=Int>
-			constexpr EnableForUnsigned<Other> operator~() const noexcept
+			constexpr typename EnableForUnsigned<Other>::type operator~() const noexcept
 				{return EnableForUnsigned<Other>(~m_value);}
 
 
@@ -217,6 +202,19 @@ namespace Type
 
 			constexpr bool operator>=(Int b) const noexcept
 				{return !(*this < b);}
+
+			constexpr Int& operator++() noexcept
+				{
+				++m_value;
+				return *this;
+				}
+
+			constexpr Int operator++(int) const noexcept
+				{
+				auto ret = *this;
+				++m_value;
+				return ret;
+				}
 		};
 
 
@@ -259,6 +257,8 @@ namespace Type
 	template<int N,Signedness s>
 	inline constexpr Int<N,s> operator^=(Int<N,s> a, Int<N,s> b) noexcept
 		{return a^=b;}
+
+	//TODO: add aliases for common types
 	}
 
 #endif
