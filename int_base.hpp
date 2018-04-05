@@ -7,6 +7,18 @@
 
 namespace Type
 	{
+	template<class To, class From>
+	constexpr
+	std::enable_if_t<IsLosslessConvertible<From,To>::value,To>
+	cast_helper(From val) noexcept
+		{return static_cast<To>(val);}
+
+	template<class To, class From>
+	constexpr
+	std::enable_if_t<!IsLosslessConvertible<From,To>::value,To>
+	cast_helper(From val)
+		{return narrow_cast<To>(val);}
+
 	template<class IntegerType>
 	class IntBase
 		{
@@ -19,8 +31,9 @@ namespace Type
 			constexpr explicit IntBase(U value):m_value(narrow_cast<IntegerType>(value))
 				{}
 
-			explicit constexpr operator IntegerType() const noexcept
-				{return m_value;}
+			template<class Other>
+			explicit constexpr operator Other() const
+				{return cast_helper<Other>(m_value);}
 
 			static constexpr bool isUnsigned() noexcept
 				{return IsUnsigned<IntegerType>::value;}

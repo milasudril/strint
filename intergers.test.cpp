@@ -42,3 +42,9 @@ STIC_TESTCASE("Can use standard size")
 	STIC_ASSERT(sizeof(val)==sizeof(int));
 	}
 
+STIC_TESTCASE("Type conversion")
+	{
+	Type::Integer<16> a(123);
+	Type::Integer<32> b(a);
+	Type::Integer<16> c(b);
+	}

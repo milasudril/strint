@@ -14,7 +14,8 @@ namespace Type
 	typename std::enable_if<HasSameSignedness<To,From>::value && sizeof(To)<sizeof(From), To>::type
 	narrow_cast(From value)
 		{
-		return std::numeric_limits<To>::min()<=value && std::numeric_limits<To>::max()>=value?
+		return static_cast<From>(std::numeric_limits<To>::min()) <= value
+			&& static_cast<From>(std::numeric_limits<To>::max()) >= value?
 			To(value) : throw (value);
 		}
 
