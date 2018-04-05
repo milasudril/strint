@@ -10,9 +10,8 @@
 namespace Type
 	{
 	template<int N=IntSize::Natural,Signedness s=Signedness::Signed>
-	class Int:public IntBase<typename BitsToIntType<N,s>::type>
+	class Integer:public IntBase<typename BitsToIntType<N,s>::type>
 		{
-		//TODO: Rename this class to Integer
 		//TODO: Add max
 		//TODO: Add min
 		//TODO: Add zero
@@ -20,13 +19,11 @@ namespace Type
 		//TODO: Add addInv (only for signed)
 
 		private:
-			typedef Int<N, s> Self;
+			template<class Other>
+			using EnableForUnsigned = std::enable_if<Integer::isUnsigned() && std::is_same<Integer,Other>::value,Other>;
 
 			template<class Other>
-			using EnableForUnsigned = std::enable_if<Int::isUnsigned() && std::is_same<Int,Other>::value,Other>;
-
-			template<class Other>
-			using EnableForSigned = std::enable_if<Int::isSigned() && std::is_same<Int,Other>::value,Other>;
+			using EnableForSigned = std::enable_if<Integer::isSigned() && std::is_same<Integer,Other>::value,Other>;
 
 		public:
 			using IntBase<typename BitsToIntType<N,s>::type>::IntBase;
@@ -34,106 +31,106 @@ namespace Type
 			using IntBase<typename BitsToIntType<N,s>::type>::isSigned;
 			using IntBase<typename BitsToIntType<N,s>::type>::m_value;
 
-			constexpr Int& operator+=(Int a) noexcept
+			constexpr Integer& operator+=(Integer a) noexcept
 				{
 				m_value+=a.m_value;
 				return *this;
 				}
 
-			constexpr Int& operator-=(Int a) noexcept
+			constexpr Integer& operator-=(Integer a) noexcept
 				{
 				m_value-=a.m_value;
 				return *this;
 				}
 
-			constexpr Int& operator*=(Int a) noexcept
+			constexpr Integer& operator*=(Integer a) noexcept
 				{
 				m_value*=a.m_value;
 				return *this;
 				}
 
-			constexpr Int& operator/=(Int a) noexcept
+			constexpr Integer& operator/=(Integer a) noexcept
 				{
 				m_value/=a.m_value;
 				return *this;
 				}
 
-			template<class Other=Int>
-			constexpr Int& operator%=(typename EnableForUnsigned<Other>::type a) noexcept
+			template<class Other=Integer>
+			constexpr Integer& operator%=(typename EnableForUnsigned<Other>::type a) noexcept
 				{
 				m_value%=a.m_value;
 				return *this;
 				}
 
-			constexpr Int& operator<<=(Int a) noexcept
+			constexpr Integer& operator<<=(Integer a) noexcept
 				{
 				m_value<<=a.m_value;
 				return *this;
 				}
 
-			constexpr Int& operator>>=(Int a) noexcept
+			constexpr Integer& operator>>=(Integer a) noexcept
 				{
 				m_value>>=a.m_value;
 				return *this;
 				}
 
-			template<class Other=Int>
-			constexpr Int& operator|=(typename EnableForUnsigned<Other>::type a) noexcept
+			template<class Other=Integer>
+			constexpr Integer& operator|=(typename EnableForUnsigned<Other>::type a) noexcept
 				{
 				m_value|=a.m_value;
 				return *this;
 				}
 
-			template<class Other=Int>
-			constexpr Int& operator&=(typename EnableForUnsigned<Other>::type a) const noexcept
+			template<class Other=Integer>
+			constexpr Integer& operator&=(typename EnableForUnsigned<Other>::type a) const noexcept
 				{
 				m_value&=a.m_value;
 				return *this;
 				}
 
-			template<class Other=Int>
-			constexpr Int& operator^=(typename EnableForUnsigned<Other>::type a) const noexcept
+			template<class Other=Integer>
+			constexpr Integer& operator^=(typename EnableForUnsigned<Other>::type a) const noexcept
 				{
 				m_value^=a.m_value;
 				return *this;
 				}
 
 
-			template<class Other=Int>
+			template<class Other=Integer>
 			constexpr typename EnableForSigned<Other>::type operator-() const noexcept
 				{return EnableForSigned<Other>(-m_value);}
 
-			template<class Other=Int>
+			template<class Other=Integer>
 			constexpr typename EnableForUnsigned<Other>::type operator~() const noexcept
 				{return EnableForUnsigned<Other>(~m_value);}
 
 
 
-			constexpr bool operator<(Int b) const noexcept
+			constexpr bool operator<(Integer b) const noexcept
 				{return m_value < b.m_value;}
 
-			constexpr bool operator>(Int b) const noexcept
+			constexpr bool operator>(Integer b) const noexcept
 				{return b < *this;}
 
-			constexpr bool operator==(Int b) const noexcept
+			constexpr bool operator==(Integer b) const noexcept
 				{return m_value == b.m_value;}
 
-			constexpr bool operator!=(Int b) const noexcept
+			constexpr bool operator!=(Integer b) const noexcept
 				{return !(*this == b);}
 
-			constexpr bool operator<=(Int b) const noexcept
+			constexpr bool operator<=(Integer b) const noexcept
 				{return !(*this > b);}
 
-			constexpr bool operator>=(Int b) const noexcept
+			constexpr bool operator>=(Integer b) const noexcept
 				{return !(*this < b);}
 
-			constexpr Int& operator++() noexcept
+			constexpr Integer& operator++() noexcept
 				{
 				++m_value;
 				return *this;
 				}
 
-			constexpr Int operator++(int) const noexcept
+			constexpr Integer operator++(int) const noexcept
 				{
 				auto ret = *this;
 				++m_value;
@@ -143,43 +140,43 @@ namespace Type
 
 
 	template<int N,Signedness s>
-	inline constexpr Int<N,s> operator+(Int<N,s> a, Int<N,s> b) noexcept
+	inline constexpr Integer<N,s> operator+(Integer<N,s> a, Integer<N,s> b) noexcept
 		{return a+=b;}
 
 	template<int N,Signedness s>
-	inline constexpr Int<N,s> operator-(Int<N,s> a, Int<N,s> b) noexcept
+	inline constexpr Integer<N,s> operator-(Integer<N,s> a, Integer<N,s> b) noexcept
 		{return a-=b;}
 
 	template<int N,Signedness s>
-	inline constexpr Int<N,s> operator*(Int<N,s> a, Int<N,s> b) noexcept
+	inline constexpr Integer<N,s> operator*(Integer<N,s> a, Integer<N,s> b) noexcept
 		{return a*=b;}
 
 	template<int N,Signedness s>
-	inline constexpr Int<N,s> operator/(Int<N,s> a, Int<N,s> b) noexcept
+	inline constexpr Integer<N,s> operator/(Integer<N,s> a, Integer<N,s> b) noexcept
 		{return a/=b;}
 
 	template<int N,Signedness s>
-	inline constexpr Int<N,s> operator%(Int<N,s> a, Int<N,s> b) noexcept
+	inline constexpr Integer<N,s> operator%(Integer<N,s> a, Integer<N,s> b) noexcept
 		{return a%=b;}
 
 	template<int N,Signedness s>
-	inline constexpr Int<N,s> operator<<(Int<N,s> a, Int<N,s> b) noexcept
+	inline constexpr Integer<N,s> operator<<(Integer<N,s> a, Integer<N,s> b) noexcept
 		{return a<<=b;}
 
 	template<int N,Signedness s>
-	inline constexpr Int<N,s> operator>>(Int<N,s> a, Int<N,s> b) noexcept
+	inline constexpr Integer<N,s> operator>>(Integer<N,s> a, Integer<N,s> b) noexcept
 		{return a>>=b;}
 
 	template<int N,Signedness s>
-	inline constexpr Int<N,s> operator|(Int<N,s> a, Int<N,s> b) noexcept
+	inline constexpr Integer<N,s> operator|(Integer<N,s> a, Integer<N,s> b) noexcept
 		{return a|=b;}
 
 	template<int N,Signedness s>
-	inline constexpr Int<N,s> operator&(Int<N,s> a, Int<N,s> b) noexcept
+	inline constexpr Integer<N,s> operator&(Integer<N,s> a, Integer<N,s> b) noexcept
 		{return a&=b;}
 
 	template<int N,Signedness s>
-	inline constexpr Int<N,s> operator^=(Int<N,s> a, Int<N,s> b) noexcept
+	inline constexpr Integer<N,s> operator^=(Integer<N,s> a, Integer<N,s> b) noexcept
 		{return a^=b;}
 
 	//TODO: add aliases for common types
