@@ -33,6 +33,5 @@ STIC_TESTCASE("Subtraction inverse of addition")
 			auto sum = val + k;
 			STIC_ASSERT(sum - k == val);
 			}
-		putchar('\n');
 		}
 	}
