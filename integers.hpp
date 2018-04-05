@@ -4,60 +4,11 @@
 #define TYPE_INTEGERS_HPP
 
 #include "int_base.hpp"
-
-#include "narrow_cast.hpp"
-#include <cstdint>
+#include "types.hpp"
 #include <climits>
 
 namespace Type
 	{
-	enum class IntSize:int
-		{
-		 Smallest = CHAR_BIT
-		,HalfNatural = CHAR_BIT * sizeof(int)/2
-		,Natural = CHAR_BIT * sizeof(int)
-		,HalfPointer = CHAR_BIT * sizeof(void*)/2
-		,Pointer = CHAR_BIT * sizeof(void*)
-		,Largest = CHAR_BIT * sizeof(intmax_t)
-		};
-
-	enum class Signedness:int{Signed,Unsigned};
-
-	template<int N,Signedness s>
-	struct BitsToIntType;
-
-	template<>
-	struct BitsToIntType<8,Signedness::Signed>
-		{typedef int8_t type;};
-
-	template<>
-	struct BitsToIntType<16,Signedness::Signed>
-		{typedef int16_t type;};
-
-	template<>
-	struct BitsToIntType<32,Signedness::Signed>
-		{typedef int32_t type;};
-
-	template<>
-	struct BitsToIntType<64,Signedness::Signed>
-		{typedef int64_t type;};
-
-	template<>
-	struct BitsToIntType<8,Signedness::Unsigned>
-		{typedef uint8_t type;};
-
-	template<>
-	struct BitsToIntType<16,Signedness::Unsigned>
-		{typedef uint16_t type;};
-
-	template<>
-	struct BitsToIntType<32,Signedness::Unsigned>
-		{typedef uint32_t type;};
-
-	template<>
-	struct BitsToIntType<64,Signedness::Unsigned>
-		{typedef uint64_t type;};
-
 	template<int N=IntSize::Natural,Signedness s=Signedness::Signed>
 	class Int:public IntBase<typename BitsToIntType<N,s>::type>
 		{

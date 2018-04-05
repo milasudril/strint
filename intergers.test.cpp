@@ -35,3 +35,9 @@ STIC_TESTCASE("Subtraction inverse of addition")
 			}
 		}
 	}
+
+STIC_TESTCASE("Can use standard size")
+	{
+	Type::Int<> val(0);
+	STIC_ASSERT(sizeof(val)==sizeof(int));
+	}

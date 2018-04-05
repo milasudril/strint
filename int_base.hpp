@@ -1,7 +1,7 @@
 //@	{"targets":[{"name":"int_base.hpp","type":"include"}]}
 
-#ifndef TYPE_INTBASE_H
-#define TYPE_INTBASE_H
+#ifndef TYPE_INTBASE_HPP
+#define TYPE_INTBASE_HPP
 
 #include "narrow_cast.hpp"
 
