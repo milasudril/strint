@@ -10,24 +10,24 @@
 namespace Type
 	{
 	template<class To,class From>
-	constexpr
+	inline constexpr
 	typename std::enable_if<HasSameSignedness<To,From>::value && sizeof(To)<sizeof(From), To>::type
 	narrow_cast(From value)
 		{
-		return static_cast<From>(std::numeric_limits<To>::min()) <= value
-			&& static_cast<From>(std::numeric_limits<To>::max()) >= value?
+		return std::numeric_limits<To>::min() <= value
+			&& std::numeric_limits<To>::max() >= value?
 			To(value) : throw (value);
 		}
 
 	template<class To, class From>
-	constexpr
+	inline constexpr
 	typename std::enable_if<IsUnsigned<To>::value && IsSigned<From>::value && sizeof(To)>=sizeof(From),To>::type
 	narrow_cast(From value)
 		{return value < 0 ? throw (value) : To(value);}
 
 
 	template<class To, class From>
-	constexpr
+	inline constexpr
 	typename std::enable_if<IsUnsigned<To>::value && IsSigned<From>::value && sizeof(To)<sizeof(From),To>::type
 	narrow_cast(From value)
 		{
@@ -35,7 +35,7 @@ namespace Type
 		}
 
 	template<class To, class From>
-	constexpr
+	inline constexpr
 	typename std::enable_if<IsSigned<To>::value && IsUnsigned<From>::value && sizeof(To)<=sizeof(From),To>::type
 	narrow_cast(From value)
 		{

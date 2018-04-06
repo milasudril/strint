@@ -8,27 +8,29 @@
 namespace Type
 	{
 	template<class To, class From>
-	constexpr
+	inline constexpr
 	std::enable_if_t<IsLosslessConvertible<From,To>::value,To>
 	cast_helper(From val) noexcept
 		{return static_cast<To>(val);}
-
-	template<class To, class From>
-	constexpr
-	std::enable_if_t<!IsLosslessConvertible<From,To>::value,To>
-	cast_helper(From val)
-		{return narrow_cast<To>(val);}
 
 	template<class IntegerType>
 	class IntBase
 		{
 		public:
-			template<class U,std::enable_if_t<IsLosslessConvertible<U,IntegerType>::value,int> x=1>
+			template<class U,std::enable_if_t<IsLosslessConvertible<U,IntegerType>::value  && std::is_integral<U>::value,int> x=0>
 			constexpr IntBase(U value) noexcept:m_value(value)
 				{}
 
-			template<class U,std::enable_if_t<!IsLosslessConvertible<U,IntegerType>::value,int> x=1>
+			template<class U,std::enable_if_t<!IsLosslessConvertible<U,IntegerType>::value && std::is_integral<U>::value,int> x=0>
 			constexpr explicit IntBase(U value):m_value(narrow_cast<IntegerType>(value))
+				{}
+
+			template<class U,std::enable_if_t<IsLosslessConvertible<U,IntegerType>::value,int> x=0>
+			constexpr IntBase(IntBase<U> value):m_value(static_cast<U>(value))
+				{}
+
+			template<class U,std::enable_if_t<!IsLosslessConvertible<U,IntegerType>::value,int> x=0>
+			constexpr explicit IntBase(IntBase<U> value):m_value(narrow_cast<IntegerType>(static_cast<U>(value)))
 				{}
 
 			template<class Other>

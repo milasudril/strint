@@ -3,8 +3,6 @@
 #include "integers.hpp"
 #include "stic/stic.hpp"
 
-#include <cstdio>
-
 
 STIC_TESTCASE("Range test")
 	{
@@ -46,5 +44,7 @@ STIC_TESTCASE("Type conversion")
 	{
 	Type::Integer<16> a(123);
 	Type::Integer<32> b(a);
-	Type::Integer<16> c(b);
+	Type::Integer<16> c(34);
+	b = c;
+	Type::Integer<16> d(b);
 	}
