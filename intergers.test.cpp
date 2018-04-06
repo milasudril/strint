@@ -19,6 +19,33 @@ STIC_TESTCASE("Range test")
 	STIC_ASSERT_NOTHROW(Int16 x(std::numeric_limits<int16_t>::max()););
 	}
 
+STIC_TESTCASE("Can use standard size")
+	{
+	Type::Integer<> val(0);
+	STIC_ASSERT(sizeof(val)==sizeof(int));
+	}
+
+STIC_TESTCASE("Type conversion")
+	{
+	int x_1 = 123;
+	int x_2 = 456;
+
+	Type::Integer<16> a(x_1);
+	Type::Integer<32> b(a);
+	STIC_ASSERT(Type::Integer<32>(x_1) == b);
+
+	Type::Integer<16> c(x_2);
+	b = c;
+	STIC_ASSERT(Type::Integer<32>(x_2) == b);
+
+	Type::Integer<16> d(b);
+	STIC_ASSERT(Type::Integer<16>(x_2) == d);
+
+	Type::Integer<16> e(1234);
+
+	STIC_ASSERT_THROW( Type::Integer<8> f{e};);
+	}
+
 STIC_TESTCASE("Subtraction inverse of addition")
 	{
 	typedef Type::Integer<8, Type::Signedness::Unsigned> UInt8;
@@ -32,19 +59,4 @@ STIC_TESTCASE("Subtraction inverse of addition")
 			STIC_ASSERT(sum - k == val);
 			}
 		}
-	}
-
-STIC_TESTCASE("Can use standard size")
-	{
-	Type::Integer<> val(0);
-	STIC_ASSERT(sizeof(val)==sizeof(int));
-	}
-
-STIC_TESTCASE("Type conversion")
-	{
-	Type::Integer<16> a(123);
-	Type::Integer<32> b(a);
-	Type::Integer<16> c(34);
-	b = c;
-	Type::Integer<16> d(b);
 	}
