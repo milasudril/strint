@@ -4,7 +4,7 @@ build:
 
 .PHONY test:
 test: build
-	find __targets -name '*.test' -exec {} \; > __targets/test_results.txt
+	find __targets -name '*.test' -exec {} \;
 
 .PHONY depgraph:
 depgraph:
