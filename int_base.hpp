@@ -17,6 +17,8 @@ namespace Type
 	class IntBase
 		{
 		public:
+			typedef IntegerType Rep;
+
 			template<class U,std::enable_if_t<IsLosslessConvertible<U,IntegerType>::value  && std::is_integral<U>::value,int> x=0>
 			constexpr IntBase(U value) noexcept:m_value(value)
 				{}

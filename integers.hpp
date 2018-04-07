@@ -26,10 +26,12 @@ namespace Type
 			using EnableForSigned = std::enable_if<Integer::isSigned() && std::is_same<Integer,Other>::value,Other>;
 
 		public:
-			using IntBase<typename BitsToIntType<N,s>::type>::IntBase;
-			using IntBase<typename BitsToIntType<N,s>::type>::isUnsigned;
-			using IntBase<typename BitsToIntType<N,s>::type>::isSigned;
-			using IntBase<typename BitsToIntType<N,s>::type>::m_value;
+			typedef IntBase<typename BitsToIntType<N,s>::type> Base;
+
+			using Base::IntBase;
+			using Base::isUnsigned;
+			using Base::isSigned;
+			using Base::m_value;
 
 			constexpr Integer& operator+=(Integer a) noexcept
 				{
@@ -98,11 +100,11 @@ namespace Type
 
 			template<class Other=Integer>
 			constexpr typename EnableForSigned<Other>::type operator-() const noexcept
-				{return EnableForSigned<Other>(-m_value);}
+				{return typename EnableForSigned<Other>::type(static_cast<typename Base::Rep>(-m_value));}
 
 			template<class Other=Integer>
 			constexpr typename EnableForUnsigned<Other>::type operator~() const noexcept
-				{return EnableForUnsigned<Other>(~m_value);}
+				{return typename EnableForUnsigned<Other>::type(static_cast<typename Base::Rep>(~m_value));}
 
 
 

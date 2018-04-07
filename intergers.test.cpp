@@ -25,6 +25,26 @@ STIC_TESTCASE("Can use standard size")
 	STIC_ASSERT(sizeof(val)==sizeof(int));
 	}
 
+STIC_TESTCASE("Invert bits")
+	{
+	typedef Type::Integer<8, Type::Signedness::Unsigned> UInt8;
+
+	UInt8 x(128);
+	UInt8 y(0);
+	STIC_ASSERT_NOTHROW(y = ~x;);
+	STIC_ASSERT(y == UInt8(0x7f));
+	}
+
+STIC_TESTCASE("Negate")
+	{
+	typedef Type::Integer<8> Int8;
+
+	Int8 x(127);
+	Int8 y(0);
+	STIC_ASSERT_NOTHROW(y = -x;);
+	STIC_ASSERT(y == Int8(-127));
+	}
+
 STIC_TESTCASE("Type conversion")
 	{
 	int x_1 = 123;
@@ -40,6 +60,7 @@ STIC_TESTCASE("Type conversion")
 
 	Type::Integer<16> d(b);
 	STIC_ASSERT(Type::Integer<16>(x_2) == d);
+	STIC_ASSERT(b == d);
 
 	Type::Integer<16> e(1234);
 
