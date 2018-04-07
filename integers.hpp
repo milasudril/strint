@@ -138,6 +138,19 @@ namespace Type
 				++m_value;
 				return ret;
 				}
+
+			constexpr Integer& operator--() noexcept
+				{
+				--m_value;
+				return *this;
+				}
+
+			constexpr Integer operator--(int) const noexcept
+				{
+				auto ret = *this;
+				--m_value;
+				return ret;
+				}
 		};
 
 
