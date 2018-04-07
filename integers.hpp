@@ -126,6 +126,8 @@ namespace Type
 			constexpr bool operator>=(Integer b) const noexcept
 				{return !(*this < b);}
 
+
+
 			constexpr Integer& operator++() noexcept
 				{
 				++m_value;
@@ -135,7 +137,7 @@ namespace Type
 			constexpr Integer operator++(int) const noexcept
 				{
 				auto ret = *this;
-				++m_value;
+				++ret.m_value;
 				return ret;
 				}
 
@@ -148,10 +150,11 @@ namespace Type
 			constexpr Integer operator--(int) const noexcept
 				{
 				auto ret = *this;
-				--m_value;
+				--ret.m_value;
 				return ret;
 				}
 		};
+
 
 
 	template<int N,Signedness s>
@@ -193,6 +196,32 @@ namespace Type
 	template<int N,Signedness s>
 	inline constexpr Integer<N,s> operator^=(Integer<N,s> a, Integer<N,s> b) noexcept
 		{return a^=b;}
+
+
+
+	template<class Type,int N,Signedness s>
+	inline constexpr bool operator==(Type a, Integer<N,s> b) noexcept
+		{return b==a;}
+
+	template<class Type,int N,Signedness s>
+	inline constexpr bool operator!=(Type a, Integer<N,s> b) noexcept
+		{return !(a==b);}
+
+	template<class Type,int N,Signedness s>
+	inline constexpr bool operator<(Type a, Integer<N,s> b) noexcept
+		{return b>a;}
+
+	template<class Type,int N,Signedness s>
+	inline constexpr bool operator>(Type a, Integer<N,s> b) noexcept
+		{return b<a;}
+
+	template<class Type,int N,Signedness s>
+	inline constexpr bool operator<=(Type a, Integer<N,s> b) noexcept
+		{return !(a>b);}
+
+	template<class Type,int N,Signedness s>
+	inline constexpr bool operator>=(Type a, Integer<N,s> b) noexcept
+		{return !(a<b);}
 
 	//TODO: add aliases for common types
 	}

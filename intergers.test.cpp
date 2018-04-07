@@ -61,6 +61,7 @@ STIC_TESTCASE("Type conversion")
 	Type::Integer<16> d(b);
 	STIC_ASSERT(Type::Integer<16>(x_2) == d);
 	STIC_ASSERT(b == d);
+	STIC_ASSERT(d == b);
 
 	Type::Integer<16> e(1234);
 
