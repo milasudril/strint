@@ -6,7 +6,6 @@
 #include <climits>
 #include <cstdint>
 
-
 namespace Type
 	{
 	enum IntSize:int

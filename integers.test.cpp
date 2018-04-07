@@ -48,11 +48,9 @@ STIC_TESTCASE("Negate")
 STIC_TESTCASE("Subtraction inverse of addition")
 	{
 	typedef Type::Integer<8, Type::Signedness::Unsigned> UInt8;
-	constexpr UInt8 val_init(0);
-	constexpr UInt8 val_max(std::numeric_limits<uint8_t>::max());
-	for(auto val = val_init; val<val_max; ++val)
+	for(auto val = UInt8::min(); val < UInt8::max(); ++val)
 		{
-		for(auto k=val; k<val_max - val; ++k)
+		for(auto k=val; k < UInt8::max() - val; ++k)
 			{
 			auto sum = val + k;
 			STIC_ASSERT(sum - k == val);
@@ -80,8 +78,10 @@ STIC_TESTCASE("Type conversion")
 
 	Type::Integer<16> e(1234);
 
-//	STIC_ASSERT_THROW( Type::Integer<8> f{e};);
+	STIC_ASSERT_THROW( Type::Integer<8> f{e};);
 	}
 
-STIC_TESTCASE("Did it run this?")
-	{}
+STIC_TESTCASE("Type names")
+	{
+	printf("%s\n", Type::Integer<16>::type());
+	}

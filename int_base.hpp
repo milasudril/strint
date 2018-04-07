@@ -4,6 +4,7 @@
 #define TYPE_INTBASE_HPP
 
 #include "narrow_cast.hpp"
+#include "type_names.hpp"
 
 namespace Type
 	{
@@ -47,8 +48,8 @@ namespace Type
 			static constexpr bool isSigned() noexcept
 				{return !isUnsigned();}
 
-		/*	static constexpr const char* type() noexcept
-				{return TypeName<IntegerType>::value;}*/
+			static constexpr const char* type() noexcept
+				{return TypeName<IntegerType>::value;}
 
 		protected:
 			IntegerType m_value;
