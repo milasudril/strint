@@ -12,12 +12,6 @@ namespace Type
 	template<int N=IntSize::Natural,Signedness s=Signedness::Signed>
 	class Integer:public IntBase<typename BitsToIntType<N,s>::type>
 		{
-		//TODO: Add max
-		//TODO: Add min
-		//TODO: Add zero
-		//TODO: Add unity
-		//TODO: Add addInv (only for signed)
-
 		private:
 			template<class Other>
 			using EnableForUnsigned = std::enable_if<Integer::isUnsigned() && std::is_same<Integer,Other>::value,Other>;
@@ -32,6 +26,26 @@ namespace Type
 			using Base::isUnsigned;
 			using Base::isSigned;
 			using Base::m_value;
+
+
+
+			static constexpr Integer max() noexcept
+				{return std::numeric_limits<typename Base::Rep>::max();}
+
+			static constexpr Integer min() noexcept
+				{return std::numeric_limits<typename Base::Rep>::min();}
+
+			static constexpr Integer zero() noexcept
+				{return Integer(static_cast<typename Base::Rep>(0));}
+
+			static constexpr Integer unity() noexcept
+				{return Integer(static_cast<typename Base::Rep>(1));}
+
+			template<class Other=Integer>
+			static constexpr typename EnableForSigned<Other>::type additiveInverse() noexcept
+				{return typename EnableForSigned<Other>::type(static_cast<typename Base::Rep>(-1));}
+
+
 
 			constexpr Integer& operator+=(Integer a) noexcept
 				{
@@ -200,27 +214,33 @@ namespace Type
 
 
 	template<class Type,int N,Signedness s>
-	inline constexpr bool operator==(Type a, Integer<N,s> b) noexcept
+	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<N,s>,Type>::value,bool>
+	operator==(Type a, Integer<N,s> b) noexcept
 		{return b==a;}
 
 	template<class Type,int N,Signedness s>
-	inline constexpr bool operator!=(Type a, Integer<N,s> b) noexcept
+	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<N,s>,Type>::value,bool>
+	operator!=(Type a, Integer<N,s> b) noexcept
 		{return !(a==b);}
 
 	template<class Type,int N,Signedness s>
-	inline constexpr bool operator<(Type a, Integer<N,s> b) noexcept
+	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<N,s>,Type>::value,bool>
+	operator<(Type a, Integer<N,s> b) noexcept
 		{return b>a;}
 
 	template<class Type,int N,Signedness s>
-	inline constexpr bool operator>(Type a, Integer<N,s> b) noexcept
+	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<N,s>,Type>::value,bool>
+	operator>(Type a, Integer<N,s> b) noexcept
 		{return b<a;}
 
 	template<class Type,int N,Signedness s>
-	inline constexpr bool operator<=(Type a, Integer<N,s> b) noexcept
+	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<N,s>,Type>::value,bool>
+	operator<=(Type a, Integer<N,s> b) noexcept
 		{return !(a>b);}
 
 	template<class Type,int N,Signedness s>
-	inline constexpr bool operator>=(Type a, Integer<N,s> b) noexcept
+	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<N,s>,Type>::value,bool>
+	operator>=(Type a, Integer<N,s> b) noexcept
 		{return !(a<b);}
 
 	//TODO: add aliases for common types

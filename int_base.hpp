@@ -19,6 +19,8 @@ namespace Type
 		public:
 			typedef IntegerType Rep;
 
+			constexpr IntBase()=default;
+
 			template<class U,std::enable_if_t<IsLosslessConvertible<U,IntegerType>::value  && std::is_integral<U>::value,int> x=0>
 			constexpr IntBase(U value) noexcept:m_value(value)
 				{}
@@ -44,6 +46,9 @@ namespace Type
 
 			static constexpr bool isSigned() noexcept
 				{return !isUnsigned();}
+
+		/*	static constexpr const char* type() noexcept
+				{return TypeName<IntegerType>::value;}*/
 
 		protected:
 			IntegerType m_value;
