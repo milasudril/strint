@@ -4,19 +4,23 @@
 #include "stic/stic.hpp"
 #include <cstring>
 
-STIC_TESTCASE("Range test")
+STIC_TESTCASE("Range tests")
 	{
 	typedef Type::Integer<uint16_t> UInt16;
 	STIC_ASSERT_THROW(UInt16 x(-1););
 	STIC_ASSERT_THROW(UInt16 x(std::numeric_limits<uint16_t>::max() + 1););
 	STIC_ASSERT_NOTHROW(UInt16 x(0););
 	STIC_ASSERT_NOTHROW(UInt16 x(std::numeric_limits<uint16_t>::max()););
+	STIC_ASSERT(UInt16::min() == std::numeric_limits<uint16_t>::min());
+	STIC_ASSERT(UInt16::max() == std::numeric_limits<uint16_t>::max());
 
 	typedef Type::Integer<int16_t> Int16;
 	STIC_ASSERT_THROW(Int16 x(std::numeric_limits<int16_t>::min() - 1););
 	STIC_ASSERT_THROW(Int16 x(std::numeric_limits<int16_t>::max() + 1););
 	STIC_ASSERT_NOTHROW(Int16 x(std::numeric_limits<int16_t>::min()););
 	STIC_ASSERT_NOTHROW(Int16 x(std::numeric_limits<int16_t>::max()););
+	STIC_ASSERT(Int16::min() == std::numeric_limits<int16_t>::min());
+	STIC_ASSERT(Int16::max() == std::numeric_limits<int16_t>::max());
 	}
 
 STIC_TESTCASE("Can use standard size")
