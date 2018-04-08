@@ -2,7 +2,7 @@
 
 #include "integers.hpp"
 #include "stic/stic.hpp"
-
+#include <cstring>
 
 STIC_TESTCASE("Range test")
 	{
@@ -83,5 +83,23 @@ STIC_TESTCASE("Type conversion")
 
 STIC_TESTCASE("Type names")
 	{
-	printf("%s\n", Type::Integer<short>::type());
+	STIC_ASSERT(Type::Integer<int8_t>::typeId() == Type::TypeId::Int8);
+	STIC_ASSERT(Type::Integer<int16_t>::typeId() == Type::TypeId::Int16);
+	STIC_ASSERT(Type::Integer<int32_t>::typeId() == Type::TypeId::Int32);
+	STIC_ASSERT(Type::Integer<int64_t>::typeId() == Type::TypeId::Int64);
+
+	STIC_ASSERT(strcmp(Type::Integer<int8_t>::typeName(),"i8") == 0);
+	STIC_ASSERT(strcmp(Type::Integer<int16_t>::typeName(),"i16") == 0);
+	STIC_ASSERT(strcmp(Type::Integer<int32_t>::typeName(),"i32") == 0);
+	STIC_ASSERT(strcmp(Type::Integer<int64_t>::typeName(),"i64") == 0);
+
+	STIC_ASSERT(Type::Integer<uint8_t>::typeId() == Type::TypeId::UInt8);
+	STIC_ASSERT(Type::Integer<uint16_t>::typeId() == Type::TypeId::UInt16);
+	STIC_ASSERT(Type::Integer<uint32_t>::typeId() == Type::TypeId::UInt32);
+	STIC_ASSERT(Type::Integer<uint64_t>::typeId() == Type::TypeId::UInt64);
+
+	STIC_ASSERT(strcmp(Type::Integer<uint8_t>::typeName(),"u8") == 0);
+	STIC_ASSERT(strcmp(Type::Integer<uint16_t>::typeName(),"u16") == 0);
+	STIC_ASSERT(strcmp(Type::Integer<uint32_t>::typeName(),"u32") == 0);
+	STIC_ASSERT(strcmp(Type::Integer<uint64_t>::typeName(),"u64") == 0);
 	}

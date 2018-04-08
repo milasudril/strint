@@ -48,8 +48,11 @@ namespace Type
 			static constexpr bool isSigned() noexcept
 				{return !isUnsigned();}
 
-			static constexpr const char* type() noexcept
-				{return TypeName<IntegerType>::value;}
+			static constexpr const char* typeName() noexcept
+				{return TypeInfo<IntegerType>::name;}
+
+			static constexpr TypeId typeId() noexcept
+				{return TypeInfo<IntegerType>::id;}
 
 		protected:
 			IntegerType m_value;
