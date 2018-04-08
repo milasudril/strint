@@ -1,7 +1,7 @@
 //@	{"targets":[{"name":"integers.hpp","type":"include"}]}
 
-#ifndef TYPE_INTEGERS_HPP
-#define TYPE_INTEGERS_HPP
+#ifndef TYPE_INTEGER_HPP
+#define TYPE_INTEGER_HPP
 
 #include "int_base.hpp"
 #include <climits>
@@ -239,8 +239,6 @@ namespace Type
 	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<IntegralType>,Type>::value,bool>
 	operator>=(Type a, Integer<IntegralType> b) noexcept
 		{return !(a<b);}
-
-	//TODO: add aliases for common types
 	}
 
 #endif

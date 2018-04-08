@@ -1,6 +1,6 @@
 //@	{"targets":[{"name":"integers.test","type":"application","autorun":1}]}
 
-#include "integers.hpp"
+#include "integer.hpp"
 #include "stic/stic.hpp"
 #include <cstring>
 
