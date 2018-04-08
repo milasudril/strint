@@ -23,6 +23,7 @@ STIC_TESTCASE("Can use standard size")
 	{
 	Type::Integer<> val(0);
 	STIC_ASSERT(sizeof(val)==sizeof(int));
+	STIC_ASSERT(val.isSigned());
 	}
 
 STIC_TESTCASE("Invert bits")
