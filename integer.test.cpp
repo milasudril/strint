@@ -1,4 +1,4 @@
-//@	{"targets":[{"name":"integers.test","type":"application","autorun":1}]}
+//@	{"targets":[{"name":"integer.test","type":"application","autorun":1}]}
 
 #include "integer.hpp"
 #include "stic/stic.hpp"
