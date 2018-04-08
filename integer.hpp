@@ -1,12 +1,12 @@
 //@	{"targets":[{"name":"integers.hpp","type":"include"}]}
 
-#ifndef TYPE_INTEGER_HPP
-#define TYPE_INTEGER_HPP
+#ifndef STRINT_INTEGER_HPP
+#define STRINT_INTEGER_HPP
 
 #include "int_base.hpp"
 #include <climits>
 
-namespace Type
+namespace Strint
 	{
 	template<class IntegralType=int>
 	class Integer:public IntBase<IntegralType>

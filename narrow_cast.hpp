@@ -1,13 +1,13 @@
 //@	{"targets":[{"name":"narrow_cast.hpp","type":"include"}]}
 
-#ifndef TYPE_NARROW_CAST_HPP
-#define TYPE_NARROW_CAST_HPP
+#ifndef STRINT_NARROW_CAST_HPP
+#define STRINT_NARROW_CAST_HPP
 
 #include "traits.hpp"
 
 #include <limits>
 
-namespace Type
+namespace Strint
 	{
 	template<class To, class From>
 	class CastException

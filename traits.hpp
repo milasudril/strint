@@ -1,11 +1,11 @@
 //@	{"targets":[{"name":"traits.hpp","type":"include"}]}
 
-#ifndef TYPE_TRAITS_HPP
-#define TYPE_TRAITS_HPP
+#ifndef STRINT_TRAITS_HPP
+#define STRINT_TRAITS_HPP
 
 #include <type_traits>
 
-namespace Type
+namespace Strint
 	{
 	template<class T>
 	struct IsUnsigned

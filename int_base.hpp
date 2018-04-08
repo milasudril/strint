@@ -1,12 +1,12 @@
 //@	{"targets":[{"name":"int_base.hpp","type":"include"}]}
 
-#ifndef TYPE_INTBASE_HPP
-#define TYPE_INTBASE_HPP
+#ifndef STRINT_INTBASE_HPP
+#define STRINT_INTBASE_HPP
 
 #include "narrow_cast.hpp"
 #include "type_names.hpp"
 
-namespace Type
+namespace Strint
 	{
 	template<class To, class From>
 	inline constexpr

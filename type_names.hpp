@@ -1,11 +1,11 @@
 //@	{"targets":[{"name":"type_names.hpp","type":"include"}]}
 
-#ifndef TYPE_TYPE_NAMES_HPP
-#define TYPE_TYPE_NAMES_HPP
+#ifndef STRINT_STRINT_NAMES_HPP
+#define STRINT_STRINT_NAMES_HPP
 
 #include <cstdint>
 
-namespace Type
+namespace Strint
 	{
 	template<class T>
 	struct TypeInfo

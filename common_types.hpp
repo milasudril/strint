@@ -1,13 +1,13 @@
 //@	{"targets":[{"name":"common_types.hpp","type":"include"}]}
 
-#ifndef TYPE_COMMON_TYPES_HPP
-#define TYPE_COMMON_TYPES_HPP
+#ifndef STRINT_COMMON_TYPES_HPP
+#define STRINT_COMMON_TYPES_HPP
 
 #include "integer.hpp"
 #include <climits>
 #include <cstdint>
 
-namespace Type
+namespace Strint
 	{
 	enum class IntSize:int
 		{

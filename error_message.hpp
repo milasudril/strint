@@ -1,11 +1,11 @@
 //@	{"targets":[{"name":"error_message.hpp","type":"include"}]}
 
-#ifndef TYPE_ERROR_MESSAGE_HPP
-#define TYPE_ERROR_MESSAGE_HPP
+#ifndef STRINT_ERROR_MESSAGE_HPP
+#define STRINT_ERROR_MESSAGE_HPP
 
 #include <array>
 
-namespace Type
+namespace Strint
 	{
 	template<class T>
 	inline char* format(char* begin,char*,T) noexcept
