@@ -4,13 +4,12 @@
 #define TYPE_INTEGERS_HPP
 
 #include "int_base.hpp"
-#include "types.hpp"
 #include <climits>
 
 namespace Type
 	{
-	template<int N=IntSize::Natural,Signedness s=Signedness::Signed>
-	class Integer:public IntBase<typename BitsToIntType<N,s>::type>
+	template<class IntegralType=int>
+	class Integer:public IntBase<IntegralType>
 		{
 		private:
 			template<class Other>
@@ -20,14 +19,12 @@ namespace Type
 			using EnableForSigned = std::enable_if<Integer::isSigned() && std::is_same<Integer,Other>::value,Other>;
 
 		public:
-			typedef IntBase<typename BitsToIntType<N,s>::type> Base;
+			typedef IntBase<IntegralType> Base;
 
 			using Base::IntBase;
 			using Base::isUnsigned;
 			using Base::isSigned;
 			using Base::m_value;
-
-
 
 			static constexpr Integer max() noexcept
 				{return std::numeric_limits<typename Base::Rep>::max();}
@@ -171,76 +168,76 @@ namespace Type
 
 
 
-	template<int N,Signedness s>
-	inline constexpr Integer<N,s> operator+(Integer<N,s> a, Integer<N,s> b) noexcept
+	template<class IntegralType>
+	inline constexpr Integer<IntegralType> operator+(Integer<IntegralType> a, Integer<IntegralType> b) noexcept
 		{return a+=b;}
 
-	template<int N,Signedness s>
-	inline constexpr Integer<N,s> operator-(Integer<N,s> a, Integer<N,s> b) noexcept
+	template<class IntegralType>
+	inline constexpr Integer<IntegralType> operator-(Integer<IntegralType> a, Integer<IntegralType> b) noexcept
 		{return a-=b;}
 
-	template<int N,Signedness s>
-	inline constexpr Integer<N,s> operator*(Integer<N,s> a, Integer<N,s> b) noexcept
+	template<class IntegralType>
+	inline constexpr Integer<IntegralType> operator*(Integer<IntegralType> a, Integer<IntegralType> b) noexcept
 		{return a*=b;}
 
-	template<int N,Signedness s>
-	inline constexpr Integer<N,s> operator/(Integer<N,s> a, Integer<N,s> b) noexcept
+	template<class IntegralType>
+	inline constexpr Integer<IntegralType> operator/(Integer<IntegralType> a, Integer<IntegralType> b) noexcept
 		{return a/=b;}
 
-	template<int N,Signedness s>
-	inline constexpr Integer<N,s> operator%(Integer<N,s> a, Integer<N,s> b) noexcept
+	template<class IntegralType>
+	inline constexpr Integer<IntegralType> operator%(Integer<IntegralType> a, Integer<IntegralType> b) noexcept
 		{return a%=b;}
 
-	template<int N,Signedness s>
-	inline constexpr Integer<N,s> operator<<(Integer<N,s> a, Integer<N,s> b) noexcept
+	template<class IntegralType>
+	inline constexpr Integer<IntegralType> operator<<(Integer<IntegralType> a, Integer<IntegralType> b) noexcept
 		{return a<<=b;}
 
-	template<int N,Signedness s>
-	inline constexpr Integer<N,s> operator>>(Integer<N,s> a, Integer<N,s> b) noexcept
+	template<class IntegralType>
+	inline constexpr Integer<IntegralType> operator>>(Integer<IntegralType> a, Integer<IntegralType> b) noexcept
 		{return a>>=b;}
 
-	template<int N,Signedness s>
-	inline constexpr Integer<N,s> operator|(Integer<N,s> a, Integer<N,s> b) noexcept
+	template<class IntegralType>
+	inline constexpr Integer<IntegralType> operator|(Integer<IntegralType> a, Integer<IntegralType> b) noexcept
 		{return a|=b;}
 
-	template<int N,Signedness s>
-	inline constexpr Integer<N,s> operator&(Integer<N,s> a, Integer<N,s> b) noexcept
+	template<class IntegralType>
+	inline constexpr Integer<IntegralType> operator&(Integer<IntegralType> a, Integer<IntegralType> b) noexcept
 		{return a&=b;}
 
-	template<int N,Signedness s>
-	inline constexpr Integer<N,s> operator^=(Integer<N,s> a, Integer<N,s> b) noexcept
+	template<class IntegralType>
+	inline constexpr Integer<IntegralType> operator^=(Integer<IntegralType> a, Integer<IntegralType> b) noexcept
 		{return a^=b;}
 
 
 
-	template<class Type,int N,Signedness s>
-	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<N,s>,Type>::value,bool>
-	operator==(Type a, Integer<N,s> b) noexcept
+	template<class Type,class IntegralType>
+	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<IntegralType>,Type>::value,bool>
+	operator==(Type a, Integer<IntegralType> b) noexcept
 		{return b==a;}
 
-	template<class Type,int N,Signedness s>
-	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<N,s>,Type>::value,bool>
-	operator!=(Type a, Integer<N,s> b) noexcept
+	template<class Type,class IntegralType>
+	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<IntegralType>,Type>::value,bool>
+	operator!=(Type a, Integer<IntegralType> b) noexcept
 		{return !(a==b);}
 
-	template<class Type,int N,Signedness s>
-	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<N,s>,Type>::value,bool>
-	operator<(Type a, Integer<N,s> b) noexcept
+	template<class Type,class IntegralType>
+	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<IntegralType>,Type>::value,bool>
+	operator<(Type a, Integer<IntegralType> b) noexcept
 		{return b>a;}
 
-	template<class Type,int N,Signedness s>
-	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<N,s>,Type>::value,bool>
-	operator>(Type a, Integer<N,s> b) noexcept
+	template<class Type,class IntegralType>
+	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<IntegralType>,Type>::value,bool>
+	operator>(Type a, Integer<IntegralType> b) noexcept
 		{return b<a;}
 
-	template<class Type,int N,Signedness s>
-	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<N,s>,Type>::value,bool>
-	operator<=(Type a, Integer<N,s> b) noexcept
+	template<class Type,class IntegralType>
+	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<IntegralType>,Type>::value,bool>
+	operator<=(Type a, Integer<IntegralType> b) noexcept
 		{return !(a>b);}
 
-	template<class Type,int N,Signedness s>
-	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<N,s>,Type>::value,bool>
-	operator>=(Type a, Integer<N,s> b) noexcept
+	template<class Type,class IntegralType>
+	inline constexpr std::enable_if_t<!IsLosslessConvertible<Integer<IntegralType>,Type>::value,bool>
+	operator>=(Type a, Integer<IntegralType> b) noexcept
 		{return !(a<b);}
 
 	//TODO: add aliases for common types

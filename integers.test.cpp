@@ -6,13 +6,13 @@
 
 STIC_TESTCASE("Range test")
 	{
-	typedef Type::Integer<16, Type::Signedness::Unsigned> UInt16;
+	typedef Type::Integer<uint16_t> UInt16;
 	STIC_ASSERT_THROW(UInt16 x(-1););
 	STIC_ASSERT_THROW(UInt16 x(std::numeric_limits<uint16_t>::max() + 1););
 	STIC_ASSERT_NOTHROW(UInt16 x(0););
 	STIC_ASSERT_NOTHROW(UInt16 x(std::numeric_limits<uint16_t>::max()););
 
-	typedef Type::Integer<16> Int16;
+	typedef Type::Integer<int16_t> Int16;
 	STIC_ASSERT_THROW(Int16 x(std::numeric_limits<int16_t>::min() - 1););
 	STIC_ASSERT_THROW(Int16 x(std::numeric_limits<int16_t>::max() + 1););
 	STIC_ASSERT_NOTHROW(Int16 x(std::numeric_limits<int16_t>::min()););
@@ -27,7 +27,7 @@ STIC_TESTCASE("Can use standard size")
 
 STIC_TESTCASE("Invert bits")
 	{
-	typedef Type::Integer<8, Type::Signedness::Unsigned> UInt8;
+	typedef Type::Integer<uint8_t> UInt8;
 
 	UInt8 x(128);
 	UInt8 y(0);
@@ -37,7 +37,7 @@ STIC_TESTCASE("Invert bits")
 
 STIC_TESTCASE("Negate")
 	{
-	typedef Type::Integer<8> Int8;
+	typedef Type::Integer<int8_t> Int8;
 
 	Int8 x(127);
 	Int8 y(0);
@@ -47,7 +47,7 @@ STIC_TESTCASE("Negate")
 
 STIC_TESTCASE("Subtraction inverse of addition")
 	{
-	typedef Type::Integer<8, Type::Signedness::Unsigned> UInt8;
+	typedef Type::Integer<uint8_t> UInt8;
 	for(auto val = UInt8::min(); val < UInt8::max(); ++val)
 		{
 		for(auto k=val; k < UInt8::max() - val; ++k)
@@ -63,25 +63,25 @@ STIC_TESTCASE("Type conversion")
 	int x_1 = 123;
 	int x_2 = 456;
 
-	Type::Integer<16> a(x_1);
-	Type::Integer<32> b(a);
-	STIC_ASSERT(Type::Integer<32>(x_1) == b);
-	Type::Integer<16> c(x_2);
+	Type::Integer<short> a(x_1);
+	Type::Integer<int> b(a);
+	STIC_ASSERT(Type::Integer<int>(x_1) == b);
+	Type::Integer<short> c(x_2);
 
 	b = c;
-	STIC_ASSERT(Type::Integer<32>(x_2) == b);
+	STIC_ASSERT(Type::Integer<int>(x_2) == b);
 
-	Type::Integer<16> d(b);
-	STIC_ASSERT(Type::Integer<16>(x_2) == d);
+	Type::Integer<short> d(b);
+	STIC_ASSERT(Type::Integer<short>(x_2) == d);
 	STIC_ASSERT(b == d);
 	STIC_ASSERT(d == b);
 
-	Type::Integer<16> e(1234);
+	Type::Integer<short> e(1234);
 
-	STIC_ASSERT_THROW( Type::Integer<8> f{e};);
+	STIC_ASSERT_THROW( Type::Integer<char> f{e};);
 	}
 
 STIC_TESTCASE("Type names")
 	{
-	printf("%s\n", Type::Integer<16>::type());
+	printf("%s\n", Type::Integer<short>::type());
 	}
