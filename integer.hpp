@@ -38,10 +38,6 @@ namespace Strint
 			static constexpr Integer unity() noexcept
 				{return Integer(static_cast<typename Base::Rep>(1));}
 
-			template<class Other=Integer>
-			static constexpr typename EnableForSigned<Other>::type additiveInverse() noexcept
-				{return typename EnableForSigned<Other>::type(static_cast<typename Base::Rep>(-1));}
-
 
 
 			constexpr Integer& operator+=(Integer a) noexcept
