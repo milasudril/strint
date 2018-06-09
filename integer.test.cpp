@@ -82,7 +82,6 @@ STIC_TESTCASE("Type conversion")
 	STIC_ASSERT(d == b);
 
 	Strint::Integer<short> e(1234);
-
 	STIC_ASSERT_THROW( Strint::Integer<char> f{e};);
 	}
 

@@ -10,8 +10,8 @@ namespace Strint
 	{
 	template<class To, class From>
 	inline constexpr
-	std::enable_if_t<IsLosslessConvertible<From,To>::value,To>
-	cast_helper(From val) noexcept
+	std::enable_if_t<IsLosslessConvertible<From,To>::value || __cplusplus >= 201703, To>
+	cast_helper(From val)
 		{return static_cast<To>(val);}
 
 	template<class IntegerType>
@@ -22,7 +22,7 @@ namespace Strint
 
 			constexpr IntBase()=default;
 
-			template<class U,std::enable_if_t<IsLosslessConvertible<U,IntegerType>::value  && std::is_integral<U>::value,int> x=0>
+			template<class U,std::enable_if_t<IsLosslessConvertible<U,IntegerType>::value && std::is_integral<U>::value,int> x=0>
 			constexpr IntBase(U value) noexcept:m_value(value)
 				{}
 
