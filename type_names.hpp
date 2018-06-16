@@ -33,21 +33,21 @@ namespace Strint
 	template<>
 	struct TypeInfo<int16_t>
 		{
-		static constexpr const char* name="i16";
+		static constexpr const char* name="i10";
 		static constexpr auto id=TypeId::Int16;
 		};
 
 	template<>
 	struct TypeInfo<int32_t>
 		{
-		static constexpr const char* name="i32";
+		static constexpr const char* name="i20";
 		static constexpr auto id=TypeId::Int32;
 		};
 
 	template<>
 	struct TypeInfo<int64_t>
 		{
-		static constexpr const char* name="i64";
+		static constexpr const char* name="i40";
 		static constexpr auto id=TypeId::Int64;
 		};
 
@@ -63,21 +63,21 @@ namespace Strint
 	template<>
 	struct TypeInfo<uint16_t>
 		{
-		static constexpr const char* name="u16";
+		static constexpr const char* name="u10";
 		static constexpr auto id=TypeId::UInt16;
 		};
 
 	template<>
 	struct TypeInfo<uint32_t>
 		{
-		static constexpr const char* name="u32";
+		static constexpr const char* name="u20";
 		static constexpr auto id=TypeId::UInt32;
 		};
 
 	template<>
 	struct TypeInfo<uint64_t>
 		{
-		static constexpr const char* name="u64";
+		static constexpr const char* name="u40";
 		static constexpr auto id=TypeId::UInt64;
 		};
 	}

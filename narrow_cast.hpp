@@ -8,10 +8,9 @@
 
 #include <limits>
 #include <exception>
-#include <array>
 
 namespace Strint
-	{
+	{		
 	template<class To,class From>
 	inline constexpr
 	typename std::enable_if<HasSameSignedness<To,From>::value && sizeof(To)<sizeof(From), To>::type

@@ -95,9 +95,9 @@ STIC_TESTCASE("Type names")
 	STIC_ASSERT(Strint::Integer<int64_t>::typeId() == Strint::TypeId::Int64);
 
 	STIC_ASSERT(strcmp(Strint::Integer<int8_t>::typeName(),"i8") == 0);
-	STIC_ASSERT(strcmp(Strint::Integer<int16_t>::typeName(),"i16") == 0);
-	STIC_ASSERT(strcmp(Strint::Integer<int32_t>::typeName(),"i32") == 0);
-	STIC_ASSERT(strcmp(Strint::Integer<int64_t>::typeName(),"i64") == 0);
+	STIC_ASSERT(strcmp(Strint::Integer<int16_t>::typeName(),"i10") == 0);
+	STIC_ASSERT(strcmp(Strint::Integer<int32_t>::typeName(),"i20") == 0);
+	STIC_ASSERT(strcmp(Strint::Integer<int64_t>::typeName(),"i40") == 0);
 
 	STIC_ASSERT(Strint::Integer<uint8_t>::typeId() == Strint::TypeId::UInt8);
 	STIC_ASSERT(Strint::Integer<uint16_t>::typeId() == Strint::TypeId::UInt16);
@@ -105,7 +105,7 @@ STIC_TESTCASE("Type names")
 	STIC_ASSERT(Strint::Integer<uint64_t>::typeId() == Strint::TypeId::UInt64);
 
 	STIC_ASSERT(strcmp(Strint::Integer<uint8_t>::typeName(),"u8") == 0);
-	STIC_ASSERT(strcmp(Strint::Integer<uint16_t>::typeName(),"u16") == 0);
-	STIC_ASSERT(strcmp(Strint::Integer<uint32_t>::typeName(),"u32") == 0);
-	STIC_ASSERT(strcmp(Strint::Integer<uint64_t>::typeName(),"u64") == 0);
+	STIC_ASSERT(strcmp(Strint::Integer<uint16_t>::typeName(),"u10") == 0);
+	STIC_ASSERT(strcmp(Strint::Integer<uint32_t>::typeName(),"u20") == 0);
+	STIC_ASSERT(strcmp(Strint::Integer<uint64_t>::typeName(),"u40") == 0);
 	}
