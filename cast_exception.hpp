@@ -4,18 +4,34 @@
 #define STRINT_CAST_EXCEPTION_HPP
 
 #include "message_formatter.hpp"
-#include <type_traits>
+
+#include <limits>
 #include <stdexcept>
 
 namespace Strint
 	{
-	class CastException : public std::runtime_error
+	template<class To, class From>
+	class CastException : public std::exception
 		{
 		public:
-			template<class From, class To>
-			explicit CastException(From value, To min, To max) noexcept:
-				std::runtime_error(formatMessage(value, min, max))
+			explicit CastException(From value) noexcept: m_value(value)
 				{}
+			
+			const char* what() const noexcept override
+				{
+				try
+					{
+					m_message = formatMessage(m_value, std::numeric_limits<To>::min()
+						, std::numeric_limits<To>::max());
+					return m_message.data();
+					}
+				catch(...)
+					{return "Value out of range";}
+				}
+			
+		private:
+			From m_value;
+			mutable std::string m_message;
 		};
 	}
 #endif

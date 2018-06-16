@@ -18,7 +18,7 @@ namespace Strint
 		{
 		return std::numeric_limits<To>::min() <= value && std::numeric_limits<To>::max() >= value?
 			  To(value)
-			: throw CastException(value, std::numeric_limits<To>::min(), std::numeric_limits<To>::max());
+			: throw CastException<To, From>(value);
 		}
 
 	template<class To, class From>
@@ -27,7 +27,7 @@ namespace Strint
 	narrow_cast(From value)
 		{
 		return value < 0 ?
-			  throw CastException(value,  std::numeric_limits<To>::min(), std::numeric_limits<To>::max())
+			  throw CastException<To, From>(value)
 			: To(value);
 		}
 
@@ -46,7 +46,7 @@ namespace Strint
 	narrow_cast(From value)
 		{
 		return value > std::numeric_limits<To>::max() ?
-			throw CastException(value, std::numeric_limits<To>::min(), std::numeric_limits<To>::max())
+			throw CastException<To, From>(value)
 				: (value);
 		}
 
