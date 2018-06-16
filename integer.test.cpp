@@ -67,6 +67,8 @@ STIC_TESTCASE("Type conversion")
 	{
 	int x_1 = 123;
 	int x_2 = 456;
+	
+	static_assert(!std::is_integral<Strint::Integer<int>>::value);
 
 	Strint::Integer<short> a(x_1);
 	Strint::Integer<int> b(a);
