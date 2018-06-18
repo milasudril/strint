@@ -26,7 +26,7 @@ namespace Strint
 	template<>
 	struct TypeInfo<int8_t>
 		{
-		static constexpr const char* name="i8";
+		static constexpr const char* name="i08";
 		static constexpr auto id=TypeId::Int8;
 		};
 
@@ -56,7 +56,7 @@ namespace Strint
 	template<>
 	struct TypeInfo<uint8_t>
 		{
-		static constexpr const char* name="u8";
+		static constexpr const char* name="u08";
 		static constexpr auto id=TypeId::UInt8;
 		};
 

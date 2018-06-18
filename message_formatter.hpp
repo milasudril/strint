@@ -69,11 +69,11 @@ namespace Strint
 					{s_formatter = std::make_unique<MessageFormatter<Formatter> const>(std::forward<Formatter>(fmt));}
 
 			private:
-				static thread_local std::unique_ptr<MessageFormatterBase const> s_formatter;
+				static std::unique_ptr<MessageFormatterBase const> s_formatter;
 			};
 
 		template<class Dummy>
-		thread_local std::unique_ptr<MessageFormatterBase const> FormatCaller<Dummy>::s_formatter = nullptr;
+		std::unique_ptr<MessageFormatterBase const> FormatCaller<Dummy>::s_formatter = nullptr;
 		}
 
 	template<class From, class To>
