@@ -1,4 +1,4 @@
-//@	{"targets":[{"name":"integers.hpp","type":"include"}]}
+//@	{"targets":[{"name":"integer.hpp","type":"include"}]}
 
 #ifndef STRINT_INTEGER_HPP
 #define STRINT_INTEGER_HPP
