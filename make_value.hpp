@@ -10,8 +10,10 @@ namespace Strint
 		{return T{x};}
 
 	template<class T>
-	inline constexpr T make_default()
+	inline constexpr T make_default(typename T::Rep x={})
 		{return make_value<T>(static_cast<typename T::Rep>(0));}
 	}
 
 #endif
+
+

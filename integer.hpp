@@ -53,8 +53,6 @@ namespace Strint
 		public:
 			typedef IntegerType Rep;
 
-			constexpr Integer()=default;
-
 			template<class U,std::enable_if_t<IsLosslessConvertible<U,IntegerType>::value && std::is_integral<U>::value,int> x=0>
 			constexpr Integer(U value) noexcept:m_value(value)
 				{}
