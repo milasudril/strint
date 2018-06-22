@@ -14,8 +14,8 @@ namespace Strint
 	inline constexpr
 	std::enable_if_t<IsLosslessConvertible<From,To>::value, To>
 	cast_helper(From val) noexcept
-		{return static_cast<To>(val);}		
-		
+		{return static_cast<To>(val);}
+
 	template<class IntegerType=int>
 	class Integer
 		{
@@ -198,7 +198,7 @@ namespace Strint
 		private:
 			IntegerType m_value;
 		};
-		
+
 	template<class IntegerType>
 	struct IsUnsigned<Integer<IntegerType>>
 		{static constexpr bool value = Integer<IntegerType>::isUnsigned();};
